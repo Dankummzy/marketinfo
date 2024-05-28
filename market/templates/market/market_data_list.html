@@ -1,0 +1,90 @@
+{% extends 'market/base.html' %}
+
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 text-center">
+            {% if user.is_authenticated %}
+                <h2 class="mb-3">Market Data</h2>
+                    <div class="mb-3">
+                        <a class="btn btn-primary" href="{% url 'market_data_create' %}">Add New Data</a>
+                    </div>
+                <form method="get" class="mb-3">
+                    <div class="input-group justify-content-center p-3">
+                        {% bootstrap_form form %}
+                        <button type="submit" class="mx-1 btn btn-success w-50">Search</button>
+                    </div>
+                </form>
+                <div class="row justify-content-center text-center">
+                    {% for data in market_data %}
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ data.product_name }}</h5>
+                                    <p class="card-text"><strong>Price:</strong> {{ data.price }}</p>
+                                    <p class="card-text"><strong>Quantity:</strong> {{ data.quantity }}</p>
+                                    <p class="card-text"><strong>Vendor:</strong> {{ data.vendor_details }}</p>
+                                    <p class="card-text"><strong>Category:</strong> {{ data.category.name }}</p>
+                                    <p class="card-text"><strong>Tags:</strong> {{ data.tags.all|join:", " }}</p>
+                                    <p class="card-text"><small class="text-muted">Posted by {{ data.created_by.email }} on {{ data.created_at }}</small></p>
+                                </div>
+                                {% if user.is_superuser %}
+                                    <div class="card-footer d-flex justify-content-between">
+                                        <a href="{% url 'market_data_edit' data.pk %}" class="btn btn-warning w-50 mx-1">Edit</a>
+                                        <a href="{% url 'market_data_delete' data.pk %}" class="btn btn-danger w-50">Delete</a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination controls -->
+                <div class="d-flex justify-content-center mt-4">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            {% if market_data.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1" aria-label="First">
+                                        <span aria-hidden="true">&laquo;&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ market_data.previous_page_number }}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% for num in market_data.paginator.page_range %}
+                                {% if market_data.number == num %}
+                                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                                {% elif num > market_data.number|add:'-3' and num < market_data.number|add:'3' %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if market_data.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ market_data.next_page_number }}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ market_data.paginator.num_pages }}" aria-label="Last">
+                                        <span aria-hidden="true">&raquo;&raquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            {% else %}
+                <p>You must be logged in to view this page.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

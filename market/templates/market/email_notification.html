@@ -1,0 +1,18 @@
+<!-- market/templates/market/email_notification.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Market Data Added</title>
+</head>
+<body>
+    <h2>New Market Data Added</h2>
+    <p>Dear User,</p>
+    <p>A new market data has been added:</p>
+    <p>Product Name: {{ market_data.product_name }}</p>
+    <p>Price: {{ market_data.price }}</p>
+    <!-- Add more fields as needed -->
+    <p>Best Regards,</p>
+    <p>Your MarketInfo Team</p>
+</body>
+</html>

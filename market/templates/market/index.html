@@ -1,0 +1,50 @@
+{% extends 'market/base.html' %}
+
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-12 text-center py-4">
+            {% if user.is_authenticated %}
+                <h1 class="display-4">Welcome to Market Info</h1>
+                <p class="lead">A comprehensive system to manage and analyze market data effectively.</p>
+                <hr class="my-4">
+                <p class="mb-4">Browse market data, visualize trends, and generate detailed reports with ease.</p>
+                
+                <div class="row mb-3 py-4">
+                    <div class="col-md-6">
+                        <div class="card bg-primary text-white h-100 d-flex justify-content-center align-items-center">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Add Market Data</h5>
+                                <p class="card-text">Create new entries and manage your market data.</p>
+                                <a href="{% url 'market_data_create' %}" class="btn btn-light">Add Data</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card bg-success text-white h-100 d-flex justify-content-center align-items-center">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">View Market Data</h5>
+                                <p class="card-text">Browse existing market data and perform analysis.</p>
+                                <a href="{% url 'market_data_list' %}" class="btn btn-light">View Data</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="jumbotron text-center">
+                    <h1 class="display-4">Welcome to Market Info</h1>
+                    <p class="lead">A comprehensive system to manage and analyze market data effectively.</p>
+                    <hr class="my-4">
+                    <p>Browse market data, visualize trends, and generate detailed reports with ease.</p>
+                    <a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Login</a>
+                    <a class="btn btn-secondary btn-lg" href="{% url 'register' %}" role="button">Register</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
